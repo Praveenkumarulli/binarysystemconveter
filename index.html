@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Binary Converter & Arithmetic Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: black;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background: white;
+            color: black;
+            padding: 20px;
+        }
+
+        .container {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .card {
+            background: #111;
+            padding: 25px;
+            border-radius: 15px;
+            width: 300px;
+            box-shadow: 0 0 10px white;
+        }
+
+        input,
+        select,
+        button {
+            padding: 10px;
+            width: 90%;
+            margin: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            background: white;
+            color: black;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: gray;
+            color: white;
+        }
+
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #00ff90;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Universal Binary Converter & Arithmetic Tool</h1>
+
+    <div class="container">
+        <!-- Conversion Section -->
+        <div class="card">
+            <h2>Number System Conversion</h2>
+            <input type="text" id="numInput" placeholder="Enter number">
+            <select id="fromBase">
+                <option value="2">Binary</option>
+                <option value="8">Octal</option>
+                <option value="10">Decimal</option>
+                <option value="16">Hexadecimal</option>
+            </select>
+            <select id="toBase">
+                <option value="2">Binary</option>
+                <option value="8">Octal</option>
+                <option value="10">Decimal</option>
+                <option value="16">Hexadecimal</option>
+            </select>
+            <button onclick="convert()">Convert</button>
+            <div id="convResult" class="result"></div>
+        </div>
+
+        <!-- Arithmetic Section -->
+        <div class="card">
+            <h2>Binary Arithmetic Operations</h2>
+            <input type="text" id="bin1" placeholder="Enter 1st Binary">
+            <input type="text" id="bin2" placeholder="Enter 2nd Binary">
+            <select id="operation">
+                <option value="add">Addition</option>
+                <option value="sub">Subtraction</option>
+                <option value="mul">Multiplication</option>
+                <option value="div">Division</option>
+            </select>
+            <button onclick="binaryOperation()">Calculate</button>
+            <div id="arthResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function convert() {
+            let num = document.getElementById("numInput").value.trim();
+            let from = parseInt(document.getElementById("fromBase").value);
+            let to = parseInt(document.getElementById("toBase").value);
+
+            try {
+                let decimal = parseInt(num, from);
+                if (isNaN(decimal)) throw "Invalid Input!";
+                let result = decimal.toString(to).toUpperCase();
+                document.getElementById("convResult").innerHTML =
+                    `Result: ${result}`;
+            } catch (e) {
+                document.getElementById("convResult").innerHTML = "Invalid Input!";
+            }
+        }
+
+        function binaryOperation() {
+            let a = document.getElementById("bin1").value.trim();
+            let b = document.getElementById("bin2").value.trim();
+            let op = document.getElementById("operation").value;
+
+            if (!/^[01]+$/.test(a) || !/^[01]+$/.test(b)) {
+                document.getElementById("arthResult").innerHTML = "Enter valid binary numbers!";
+                return;
+            }
+
+            let n1 = parseInt(a, 2);
+            let n2 = parseInt(b, 2);
+            let result;
+
+            switch (op) {
+                case 'add': result = n1 + n2; break;
+                case 'sub': result = n1 - n2; break;
+                case 'mul': result = n1 * n2; break;
+                case 'div':
+                    if (n2 === 0) {
+                        document.getElementById("arthResult").innerHTML = "Cannot divide by zero!";
+                        return;
+                    }
+                    result = Math.floor(n1 / n2);
+                    break;
+            }
+
+            document.getElementById("arthResult").innerHTML =
+                `Binary Result: ${result.toString(2)}<br>Decimal: ${result}`;
+        }
+    </script>
+
+</body>
+
+</html>
